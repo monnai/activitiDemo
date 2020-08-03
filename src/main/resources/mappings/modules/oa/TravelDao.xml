@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.oa.dao.TravelDao">
+    
+	<sql id="travelColumns">
+		a.id AS "id",
+		a.process_instance_id AS "processInstanceId",
+		a.apply_date AS "applyDate",
+		a.apply_type AS "applyType",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.destination AS "destination",
+		a.reason AS "reason",
+		a.reality_start_time AS "realityStartTime",
+		a.reality_end_time AS "realityEndTime",
+		a.create_by AS "createBy.id",
+		u.name AS "createBy.name",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="travelJoins">
+		JOIN sys_user u ON u.id = a.create_by
+		JOIN sys_office o ON o.id = u.office_id
+	</sql>
+    
+	<select id="get" resultType="Travel">
+		SELECT 
+			<include refid="travelColumns"/>
+		FROM oa_travel a
+		<include refid="travelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Travel">
+		SELECT 
+			<include refid="travelColumns"/>
+		FROM oa_travel a
+		<include refid="travelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="applyDate != null and applyDate != ''">
+				AND a.apply_date = #{applyDate}
+			</if>
+			<if test="applyType != null and applyType != ''">
+				AND a.apply_type = #{applyType}
+			</if>
+			<if test="beginDate != null and beginDate != ''">
+				AND a.begin_date = #{beginDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date = #{endDate}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Travel">
+		SELECT 
+			<include refid="travelColumns"/>
+		FROM oa_travel a
+		<include refid="travelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO oa_travel(
+			id,
+			process_instance_id,
+			apply_date,
+			apply_type,
+			begin_date,
+			end_date,
+			destination,
+			reason,
+			reality_start_time,
+			reality_end_time,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{processInstanceId},
+			#{applyDate},
+			#{applyType},
+			#{beginDate},
+			#{endDate},
+			#{destination},
+			#{reason},
+			#{realityStartTime},
+			#{realityEndTime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE oa_travel SET 	
+			apply_date = #{applyDate},
+			apply_type = #{applyType},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			destination = #{destination},
+			reason = #{reason},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE oa_travel SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
