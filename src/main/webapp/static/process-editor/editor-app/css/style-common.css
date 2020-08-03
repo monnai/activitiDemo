@@ -532,7 +532,8 @@ a.dropdown-toggle {
 /* Sub header */
 .subheader {
     /*background-color: #e8edf1;*/
-    background-color: #eff9ff;
+    /*background-color: #eff9ff;*/
+    background-color: #f5f5f5;
     min-height: 60px;
     /*border-bottom: 1px solid #a4acb9;*/
 }

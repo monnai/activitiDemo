@@ -570,7 +570,6 @@ angular.module('activitiModeler')
         /* Click handler for clicking a property */
         $scope.propertyClicked = function (index) {
             if (!$scope.selectedItem.properties[index].hidden) {
-              debugger;
                 $scope.selectedItem.properties[index].mode = "write";
             }
         };

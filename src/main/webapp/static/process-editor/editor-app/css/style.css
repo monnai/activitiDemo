@@ -256,7 +256,8 @@ div.canvas-wrapper {
 
 div.propertySection {
   height: 250px;
-  background-color: #eff9ff;
+  background-color: #f5f5f5;
+  /*background-color: #eff9ff;*/
   margin-bottom: 0px;
 }
 
